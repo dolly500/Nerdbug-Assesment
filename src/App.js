@@ -100,8 +100,8 @@ const App = () => {
     setFavorites(updatedFavorites);
   };
 
-  const saveNote = (city, note) => {
-    setNotes({ ...notes, [city.id]: note });
+  const saveNote = (cityId, note) => {
+    setNotes({ ...notes, [cityId]: note });
   };
 
   return (
@@ -133,7 +133,7 @@ const App = () => {
           <button onClick={() => addToFavorites(weatherData)}>Add to Favorites</button>
           <textarea
             value={notes[weatherData.id] || ""}
-            onChange={(e) => saveNote(weatherData.id, e.target.value)}
+            onChange={(e) => saveNote(weatherData.id, e.target.value)} readOnly={false} disabled={false}
           />
         </div>
       )}

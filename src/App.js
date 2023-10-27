@@ -10,8 +10,28 @@ const App = () => {
   const [weatherData, setWeatherData] = useState({});
   const [favorites, setFavorites] = useState([]);
   const [notes, setNotes] = useState({});
-
+  const [currentNote, setCurrentNote] = useState("");
+ 
   const apiKey = "3d68fc1de44c7675bcfeafcb08c04b6c"; 
+
+  
+  const fetchUserLocationWeather = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const { latitude, longitude } = position.coords;
+        fetch(
+          `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            setWeatherData(data);
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+          });
+      });
+    }
+  };
 
   // useEffect(() => {
   //   // Fetch data for the 15 largest cities by population (you need to provide the city names)
@@ -108,6 +128,8 @@ const App = () => {
     <div>
       <h1>World Weather App</h1>
 
+      <button onClick={fetchUserLocationWeather}>Get My Weather</button> <br /> <br />
+
       <input
         type="text"
         value={search}
@@ -132,13 +154,13 @@ const App = () => {
           <p>Temperature: {weatherData.main.temp}°C</p>
           <button onClick={() => addToFavorites(weatherData)}>Add to Favorites</button>
           <textarea
-            value={notes[weatherData.id] || ""}
-            onChange={(e) => saveNote(weatherData.id, e.target.value)} readOnly={false} disabled={false}
+            value={currentNote}
+            onChange={(e) => setCurrentNote(e.target.value)} readOnly={false} disabled={false}
           />
         </div>
       )}
     </div>
-  );
+  ); 
 };
 
 export default App;

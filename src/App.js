@@ -77,7 +77,7 @@ const App = () => {
       setWeatherData(JSON.parse(cachedData));
     } else {
       fetch(
-        `http://api.openweathermap.org/data/2.5/weather?q=${search}&appid=${apiKey}&units=metric`
+        `https://api.openweathermap.org/data/2.5/weather?q=${search}&appid=${apiKey}&units=metric`
       )
         .then((response) => response.json())
         .then((data) => {

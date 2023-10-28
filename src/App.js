@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useState, useEffect } from "react";
 import FavoritesList from "./FavouriteList";
 import CityList from "./CityList";
@@ -13,7 +13,8 @@ const App = () => {
   const [currentNote, setCurrentNote] = useState("");
   const [selectedCity, setSelectedCity] = useState(null);
  
-  const apiKey = "3d68fc1de44c7675bcfeafcb08c04b6c"; 
+  // const apiKey = "3d68fc1de44c7675bcfeafcb08c04b6c"; 
+  const apiKey = process.env.REACT_APP_OPENWEATHER_API_KEY;
 
   // For Location 
   const getWeatherForUserLocation = () => {
@@ -45,7 +46,7 @@ const App = () => {
       // Otherwise, request the user's location and fetch weather data
       getWeatherForUserLocation();
     }
-  }, []);     
+  }, [getWeatherForUserLocation]);     
 
   // useEffect(() => {
   //   // Fetch data for the 15 largest cities by population (you need to provide the city names)

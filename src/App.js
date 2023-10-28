@@ -11,11 +11,12 @@ const App = () => {
   const [favorites, setFavorites] = useState([]);
   const [notes, setNotes] = useState({});
   const [currentNote, setCurrentNote] = useState("");
+  const [selectedCity, setSelectedCity] = useState(null);
  
   const apiKey = "3d68fc1de44c7675bcfeafcb08c04b6c"; 
 
-  
-  const fetchUserLocationWeather = () => {
+  // For Location 
+  const getWeatherForUserLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
         const { latitude, longitude } = position.coords;
@@ -32,6 +33,19 @@ const App = () => {
       });
     }
   };
+
+  useEffect(() => {
+    // Check if the user's location data is already present
+    const userLocationData = JSON.parse(localStorage.getItem("userLocationData"));
+
+    if (userLocationData) {
+      // If data is found in local storage, use it
+      setWeatherData(userLocationData);
+    } else {
+      // Otherwise, request the user's location and fetch weather data
+      getWeatherForUserLocation();
+    }
+  }, []);     
 
   // useEffect(() => {
   //   // Fetch data for the 15 largest cities by population (you need to provide the city names)
@@ -109,7 +123,33 @@ const App = () => {
         });
     }
   };
-  
+
+    // Function to fetch detailed weather data for a specific city
+const fetchCityWeather = (cityId) => {
+  fetch(
+    `https://api.openweathermap.org/data/2.5/weather?id=${cityId}&appid=${apiKey}&units=metric`
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      setWeatherData(data);
+      setSelectedCity(cityId);
+      // Fetch detailed weather data for the selected city
+      fetch(
+        `https://api.openweathermap.org/data/2.5/weather?id=${cityId}&appid=${apiKey}&units=metric`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          setWeatherData(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+};
+
 
   const addToFavorites = (city) => {
     setFavorites([...favorites, city]);
@@ -128,7 +168,7 @@ const App = () => {
     <div>
       <h1>World Weather App</h1>
 
-      <button onClick={fetchUserLocationWeather}>Get My Weather</button> <br /> <br />
+      <button style={{display: 'none'}} onClick={getWeatherForUserLocation}>Get My Weather</button> 
 
       <input
         type="text"
@@ -146,7 +186,14 @@ const App = () => {
       />
 
       <h2>Cities</h2>
-      <CityList cities={cities} addToFavorites={addToFavorites} />
+      <CityList cities={cities} addToFavorites={addToFavorites} fetchCityWeather={fetchCityWeather}/>
+
+
+      {selectedCity && (
+        <div>
+          <h2>{selectedCity}</h2>
+        </div>
+      )}
 
       {weatherData.name && (
         <div>

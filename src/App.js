@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import FavoritesList from "./FavouriteList";
 import CityList from "./CityList";
 import './index.css'
@@ -13,11 +13,12 @@ const App = () => {
   const [currentNote, setCurrentNote] = useState("");
   const [selectedCity, setSelectedCity] = useState(null);
  
+ 
   // const apiKey = "3d68fc1de44c7675bcfeafcb08c04b6c"; 
   const apiKey = process.env.REACT_APP_OPENWEATHER_API_KEY;
 
   // For Location 
-  const getWeatherForUserLocation = () => {
+  const getWeatherForUserLocation = useCallback(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
         const { latitude, longitude } = position.coords;
@@ -33,7 +34,7 @@ const App = () => {
           });
       });
     }
-  };
+  }, [apiKey])
 
   useEffect(() => {
     // Check if the user's location data is already present

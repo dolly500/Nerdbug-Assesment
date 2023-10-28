@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import { useState, useEffect } from "react";
 import FavoritesList from "./FavouriteList";
 import CityList from "./CityList";

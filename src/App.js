@@ -170,7 +170,7 @@ const fetchCityWeather = (cityId) => {
     <div>
       <h1>World Weather App</h1>
 
-      <button onClick={getWeatherForUserLocation}>Get My Weather</button>  <br /><br />
+      <button style={{display: 'none'}} onClick={getWeatherForUserLocation}>Get My Weather</button>  <br /><br />
 
       <input
         type="text"

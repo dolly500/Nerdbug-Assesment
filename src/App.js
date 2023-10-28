@@ -170,7 +170,7 @@ const fetchCityWeather = (cityId) => {
     <div>
       <h1>World Weather App</h1>
 
-      <button style={{display: 'none'}} onClick={getWeatherForUserLocation}>Get My Weather</button> 
+      <button onClick={getWeatherForUserLocation}>Get My Weather</button>  <br /><br />
 
       <input
         type="text"
@@ -191,11 +191,11 @@ const fetchCityWeather = (cityId) => {
       <CityList cities={cities} addToFavorites={addToFavorites} fetchCityWeather={fetchCityWeather}/>
 
 
-      {selectedCity && (
+      {/* {selectedCity && (
         <div>
           <h2>{selectedCity}</h2>
         </div>
-      )}
+      )} */}
 
       {weatherData.name && (
         <div>
